@@ -1,0 +1,18 @@
+opam-version: "1.2"
+name: "indexeddb"
+version: "dev"
+maintainer: "dev@ocsigen.org>"
+authors: "Thomas Leonard <talex5@gmail.com>"
+homepage: "https://github.com/ocsigen/ocaml-indexeddb"
+bug-reports: "https://github.com/ocsigen/ocaml-indexeddb/issues"
+license: "ISC"
+dev-repo: "https://github.com/ocsigen/ocaml-indexeddb.git"
+build: [make]
+install: [make "install"]
+remove: ["ocamlfind" "remove" "indexeddb"]
+depends: [
+  "base64"
+  "js_of_ocaml"
+  "lwt"
+  "uutf"
+]
