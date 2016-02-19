@@ -6,10 +6,11 @@ Authors:     Thomas Leonard, Vasilis Papavasileiou
 License:     ISC
 Plugins:     META (0.4), DevFiles (0.4)
 BuildTools:  ocamlbuild
+AlphaFeatures: pure_interface
 
 Library "indexeddb"
   Path:		   lib
   FindlibName: 	   indexeddb
-  InternalModules: Idb_utils, Idb_js_api
-  Modules: 	   Idb_lwt
-  BuildDepends:    lwt, js_of_ocaml, js_of_ocaml.syntax, base64, uutf
+  InternalModules: Idb_js_api
+  Modules: 	   Idb_sigs, Idb_lwt
+  BuildDepends:    lwt, js_of_ocaml, js_of_ocaml.syntax
