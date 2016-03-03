@@ -11,8 +11,7 @@
 (* Note: we currently assume all keys and values are strings. This
    will always be the case for entries added using this interface. *)
 type key = Js.js_string Js.t
-type value = Js.js_string Js.t
-type store_name = Js.js_string Js.t
+type _ store_name = Js.js_string Js.t
 type mode = Js.js_string Js.t
 
 class type versionChangeEvent = object
@@ -35,9 +34,10 @@ class type cursor = object
   method key : key Js.readonly_prop
   method continue : unit Js.meth
 end
-class type cursorWithValue = object
+
+class type ['a] cursorWithValue = object
   inherit cursor
-  method value : value Js.readonly_prop
+  method value : 'a Js.readonly_prop
 end
 
 class type dom_exception = object
@@ -55,41 +55,44 @@ class type request = object
     ('self Js.t, successEvent Js.t) Dom.event_listener Js.prop
 end
 
-class type getRequest = object ('self)
+class type ['a] getRequest = object ('self)
   inherit request
-  method result : value Js.Optdef.t Js.readonly_prop
+  method result : 'a Js.Optdef.t Js.readonly_prop
 end
 
-class type openCursorRequest = object
+class type ['a] openCursorRequest = object
   inherit request
-  method result : cursorWithValue Js.t Js.Opt.t Js.readonly_prop
+  method result : 'a cursorWithValue Js.t Js.Opt.t Js.readonly_prop
 end
 
-class type objectStore = object
-  method add : value -> key -> request Js.t Js.meth
-  method put : value -> key -> request Js.t Js.meth
+class type ['a] objectStore = object
+  method add : 'a Js.t -> key -> request Js.t Js.meth
+  method put : 'a Js.t -> key -> request Js.t Js.meth
   method delete : key -> request Js.t Js.meth
-  method get : key -> getRequest Js.t Js.meth
-  method openCursor : openCursorRequest Js.t Js.meth
+  method get : key -> 'a Js.t getRequest Js.t Js.meth
+  method openCursor : 'a Js.t openCursorRequest Js.t Js.meth
 end
 
-class type transaction = object
+class type ['a] transaction = object
   method oncomplete :
     ('self Js.t, completeEvent Js.t) Dom.event_listener Js.prop
   method onerror :
     ('self Js.t, request errorEvent Js.t) Dom.event_listener Js.prop
-  method objectStore : store_name -> objectStore Js.t Js.meth
+  method objectStore : 'a store_name -> 'a objectStore Js.t Js.meth
   method abort : unit Js.meth
 end
 
 class type database = object
   method close : unit Js.meth
-  method createObjectStore : store_name -> objectStore Js.t Js.meth
-  method deleteObjectStore : store_name -> unit Js.meth
+  method createObjectStore :
+    'a . 'a store_name -> 'a objectStore Js.t Js.meth
+  method deleteObjectStore :
+    'a . 'a store_name -> unit Js.meth
   method onerror :
     ('self Js.t, request errorEvent Js.t) Dom.event_listener Js.prop
   method transaction :
-    store_name Js.js_array Js.t -> mode -> transaction Js.t Js.meth
+    'a . 'a store_name Js.js_array Js.t -> mode ->
+    'a transaction Js.t Js.meth
 end
 
 class type openDBRequest = object ('self)
